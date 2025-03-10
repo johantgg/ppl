@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GARUDA - DATA ALUSISTA MILITER INDONESIA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!--== Favicon ==-->
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
+
+    <!--== Google Fonts ==-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+
+    <!-- build:css assets/css/app.min.css -->
+    <!--== jqvmap Min CSS ==-->
+    <link href="assets/css/jqvmap.min.css" rel="stylesheet" />
+    <!--== ChartJS Min CSS ==-->
+    <link href="assets/css/chart.min.css" rel="stylesheet" />
+    <!--== DataTables Min CSS ==-->
+    <link href="assets/css/datatables.min.css" rel="stylesheet" />
+    <!--== Select2 Min CSS ==-->
+    <link href="assets/css/select2.min.css" rel="stylesheet" />
+    <!--== Bootstrap Min CSS ==-->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!--== Main Style CSS ==-->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!-- endbuild -->
+
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!--== Start Header Wrapper ==-->
+    <header class="header-wrapper">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-4">
+                    <div class="logo-wrap">
+                        <a href="index.html"><img src="assets/img/logo.png" alt="logo" /></a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                  
+                    <div class="logo-text" style="margin-left: -350px;">
+                        <h2 style="color: #d10000;">G A R U D A</h2>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="navbar-wrap">
+                        <nav class="menubar">
+                            <ul class="nav">
+                                <li><a href="index.html">Dashboard</a></li>
+                                <li><a href="map.html">Map</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--== End Header Wrapper ==-->
+
+    <!--== Start Main Content Wrapper ==-->
+    <main class="main-content-wrapper">
+        <div class="content-section-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="row mtn-25 military-stats">
+                            <div class="col-sm-6">
+                                <div class="alutsista-block">
+                                    <div class="d-flex align-items-center">
+                                        <img src="assets/img/tank-icon.png" alt="Tank" class="military-icon">
+                                        <div>
+                                            <h4 class="equipment-count">150</h4>
+                                            <p class="equipment-type">Main Battle Tanks</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-sm-6">
+                                <div class="alutsista-block">
+                                    <div class="d-flex align-items-center">
+                                        <img src="assets/img/artillery-icon.png" alt="Artillery" class="military-icon">
+                                        <div>
+                                            <h4 class="equipment-count">300</h4>
+                                            <p class="equipment-type">Artillery Systems</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!-- Add more equipment blocks as needed -->
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="detail-section">
+                                    <h3 class="kodam-title">KODAM Detail View</h3>
+                                    <div class="select-kodam mb-3">
+                                        <select class="form-control" id="kodamSelect">
+                                            <option value="">Select KODAM</option>
+                                            <option value="kodam1">KODAM Jaya</option>
+                                            <option value="kodam2">KODAM Siliwangi</option>
+                                            <!-- Add more KODAM options -->
+                                        </select>
+                                    </div>
+                                    <div id="kodamDetails" class="mt-4">
+                                        <!-- KODAM details will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-xl-6">
+                        <div class="map-container">
+                            <!-- Add your military assets map here -->
+                            <div id="military-assets-map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Add additional sections for KOREM and KORAMIL data -->
+    </main>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Select KODAM</h4>
+                <select class="form-control" id="kodamSelect">
+                    <option value="">Select KODAM</option>
+                    <option value="kodam1">KODAM Jaya</option>
+                    <option value="kodam2">KODAM Siliwangi</option>
+                    <!-- Add more KODAM options -->
+                </select>
+                <div id="kodamDetails" class="mt-4">
+                    <!-- KODAM details will be loaded here -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h4>Select KOREM</h4>
+                <select class="form-control" id="koremSelect">
+                    <option value="">Select KOREM</option>
+                    <option value="korem1">KOREM 1</option>
+                    <option value="korem2">KOREM 2</option>
+                    <!-- Add more KOREM options -->
+                </select>
+                <div id="koremDetails" class="mt-4">
+                    <!-- KOREM details will be loaded here -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h4>Select KORAMIL</h4>
+                <select class="form-control" id="koramilSelect">
+                    <option value="">Select KORAMIL</option>
+                    <option value="koramil1">KORAMIL 1</option>
+                    <option value="koramil2">KORAMIL 2</option>
+                    <!-- Add more KORAMIL options -->
+                </select>
+                <div id="koramilDetails" class="mt-4">
+                    <!-- KORAMIL details will be loaded here -->
+                </div>
+            </div>
+            <div class="scroll-top-btn" id="scrollTopBtn">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        });
+
+        scrollBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add smooth scrolling to all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            const kodamSelect = document.getElementById('kodamSelect');
+            const koremSelect = document.getElementById('koremSelect');
+            const koramilSelect = document.getElementById('koramilSelect');
+            const kodamDetails = document.getElementById('kodamDetails');
+            const koremDetails = document.getElementById('koremDetails');
+            const koramilDetails = document.getElementById('koramilDetails');
+
+            kodamSelect.addEventListener('change', function () {
+                const kodamValue = kodamSelect.value;
+                if (kodamValue) {
+                    loadAlutsistaDetails(kodamValue, kodamDetails);
+                } else {
+                    kodamDetails.innerHTML = '';
+                }
+            });
+
+            koremSelect.addEventListener('change', function () {
+                const koremValue = koremSelect.value;
+                if (koremValue) {
+                    loadAlutsistaDetails(koremValue, koremDetails);
+                } else {
+                    koremDetails.innerHTML = '';
+                }
+            });
+
+            koramilSelect.addEventListener('change', function () {
+                const koramilValue = koramilSelect.value;
+                if (koramilValue) {
+                    loadAlutsistaDetails(koramilValue, koramilDetails);
+                } else {
+                    koramilDetails.innerHTML = '';
+                }
+            });
+
+            function loadAlutsistaDetails(unit, container) {
+                container.innerHTML = `
+                    <h4>Alutsista Details for ${unit}</h4>
+                    <ul>
+                        <li>Main Battle Tanks: 10</li>
+                        <li>Artillery Systems: 20</li>
+                        <!-- Add more dummy alutsista details -->
+                    </ul>
+                `;
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const kodamSelect = document.getElementById('kodamSelect');
+            const koremSelectContainer = document.createElement('div');
+            const koramilSelectContainer = document.createElement('div');
+            const alutsistaContainer = document.createElement('div');
+
+            koremSelectContainer.classList.add('select-korem', 'mb-3');
+            koramilSelectContainer.classList.add('select-koramil', 'mb-3');
+            alutsistaContainer.classList.add('alutsista-details', 'mt-4');
+
+            kodamSelect.addEventListener('change', function () {
+                const kodamValue = kodamSelect.value;
+                if (kodamValue) {
+                    loadKoremOptions(kodamValue);
+                } else {
+                    koremSelectContainer.innerHTML = '';
+                    koramilSelectContainer.innerHTML = '';
+                    alutsistaContainer.innerHTML = '';
+                }
+            });
+
+            function loadKoremOptions(kodam) {
+                koremSelectContainer.innerHTML = `
+                    <select class="form-control" id="koremSelect">
+                        <option value="">Select KOREM</option>
+                        <option value="korem1">KOREM 1</option>
+                        <option value="korem2">KOREM 2</option>
+                        <!-- Add more KOREM options based on selected KODAM -->
+                    </select>
+                `;
+                document.getElementById('kodamDetails').appendChild(koremSelectContainer);
+
+                const koremSelect = document.getElementById('koremSelect');
+                koremSelect.addEventListener('change', function () {
+                    const koremValue = koremSelect.value;
+                    if (koremValue) {
+                        loadKoramilOptions(koremValue);
+                    } else {
+                        koramilSelectContainer.innerHTML = '';
+                        alutsistaContainer.innerHTML = '';
+                    }
+                });
+            }
+
+            function loadKoramilOptions(korem) {
+                koramilSelectContainer.innerHTML = `
+                    <select class="form-control" id="koramilSelect">
+                        <option value="">Select KORAMIL</option>
+                        <option value="koramil1">KORAMIL 1</option>
+                        <option value="koramil2">KORAMIL 2</option>
+                        <!-- Add more KORAMIL options based on selected KOREM -->
+                    </select>
+                `;
+                document.getElementById('kodamDetails').appendChild(koramilSelectContainer);
+
+                const koramilSelect = document.getElementById('koramilSelect');
+                koramilSelect.addEventListener('change', function () {
+                    const koramilValue = koramilSelect.value;
+                    if (koramilValue) {
+                        loadAlutsistaDetails(koramilValue);
+                    } else {
+                        alutsistaContainer.innerHTML = '';
+                    }
+                });
+            }
+
+            function loadAlutsistaDetails(koramil) {
+                alutsistaContainer.innerHTML = `
+                    <h4>Alutsista Details for ${koramil}</h4>
+                    <ul>
+                        <li>Main Battle Tanks: 10</li>
+                        <li>Artillery Systems: 20</li>
+                        <!-- Add more dummy alutsista details -->
+                    </ul>
+                `;
+                document.getElementById('kodamDetails').appendChild(alutsistaContainer);
+            }
+        });
+    </script>
+    <!--== End Main Content Wrapper ==-->
+
+
+    <!--=======================Javascript============================-->
+    <!-- build:js assets/js/app.min.js -->
+    <!--=== Modernizr Min Js ===-->
+    <script src="assets/js/modernizr.min.js"></script>
+    <!--=== jQuery Min Js ===-->
+    <script src="assets/js/jquery.min.js"></script>
+    <!--=== jQuery Migration Min Js ===-->
+    <script src="assets/js/jquery-migrate.min.js"></script>
+    <!--=== Popper Min Js ===-->
+    <script src="assets/js/popper.min.js"></script>
+    <!--=== Bootstrap Min Js ===-->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!--=== Select2 Min Js ===-->
+    <script src="assets/js/select2.full.min.js"></script>
+    <!--=== Data Table Min Js ===-->
+    <script src="assets/js/datatables.min.js"></script>
+    <!--=== ChartJS Min Js ===-->
+    <script src="assets/js/chart.min.js"></script>
+    <!--=== jQuery Vector Map Min Js ===-->
+    <script src="assets/js/jquery.vmap.min.js"></script>
+    <!--=== jQuery Vector World Min Js ===-->
+    <script src="assets/js/jquery.vmap.world.js"></script>
+
+    <!--=== APP Js ===-->
+    <script src="assets/js/app.js"></script>
+    <!--=== Active Js ===-->
+    <script src="assets/js/active.js"></script>
+
+    <!-- endbuild -->
+</body>
+
+</html>
