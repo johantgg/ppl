@@ -25,7 +25,7 @@
 /*=====================================
    01. Typography CSS
 ===================================== */
-/* login panel css . */
+/* login panel css t. */
 
 
 
@@ -292,11 +292,142 @@ Header Style
     }
 }
 
+/* Add after existing CSS */
 
+.military-stats {
+    background: linear-gradient(to right, #1a2a3a, #2c3e50);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.alutsista-block {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.alutsista-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.kodam-title {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.equipment-count {
+    color: #3498db;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.equipment-type {
+    color: #ecf0f1;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.military-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+
+.detail-section {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.detail-title {
+    color: #3498db;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.map-container {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 20px;
+    height: 400px;
+}
 /*=========================
 Tracker Block Style
 ============================*/
 
+html {
+    scroll-behavior: smooth;
+}
+
+.scroll-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+.military-marker {
+    background-color: #1a2a3a;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+#info {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-width: 350px;
+    transition: all 0.3s ease;
+}
+
+#info table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#info th, #info td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#info th {
+    background: #1a2a3a;
+    color: white;
+}
+.scroll-top-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #2c3e50, #1a2a3a);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-top-btn.visible {
+    display: flex;
+}
 .tracker-block {
     background-color: #FFFFFF;
     display: -webkit-box;
@@ -1835,4 +1966,35 @@ only screen and (min-width: 768px) and (max-width: 991.98px) {
     color: #4D4D4D;
     font-size: 18px;
     margin-bottom: 25px;
+}
+
+.military-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(26, 42, 58, 0.9);
+    padding: 15px 0;
+    z-index: 1000;
+}
+
+.btn-military {
+    width: 100%;
+    padding: 10px 20px;
+    border: 2px solid #fff;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-military:hover {
+    background: #fff;
+    color: #1a2a3a;
+}
+
+.btn-military.active {
+    background: #d10000;
+    border-color: #d10000;
 }

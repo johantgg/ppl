@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Jibanu - Coronavirus Stats Dashboard Template</title>
-
+    
+    <title>PETA KODAM TNI AD</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 900px; width: 100%; }
+    </style>
     <!--== Favicon ==-->
     <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
 
@@ -36,7 +41,6 @@
 </head>
 
 <body>
-    <!--== Start Header Wrapper ==-->
     <header class="header-wrapper">
         <div class="container">
             <div class="row justify-content-between align-items-center">
@@ -45,20 +49,18 @@
                         <a href="index.html"><img src="assets/img/logo.png" alt="logo" /></a>
                     </div>
                 </div>
-
-                <div class="col-sm-6 col-lg-4">
-                    <div class="last-update-wrap">
-                        <p class="mb-0">Update: <span class="last-update"></span></p>
+                <div class="col-lg-4">
+                  
+                    <div class="logo-text" style="margin-left: -350px;">
+                        <h2 style="color: #d10000;">G A R U D A</h2>
                     </div>
                 </div>
-
                 <div class="col-sm-6 col-lg-4">
                     <div class="navbar-wrap">
                         <nav class="menubar">
                             <ul class="nav">
                                 <li><a href="index.html">Dashboard</a></li>
                                 <li><a href="map.html">Map</a></li>
-                                <li><a href="badge.html">Badge</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -66,77 +68,300 @@
             </div>
         </div>
     </header>
-    <!--== End Header Wrapper ==-->
+    
+    <style>
+        #info {
+            position: absolute;
+            top: 80px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+    </style>
+    <div id="map"></div>
+    <div id="info"></div>
 
-    <!--== Start Main Content Wrapper ==-->
-    <main class="main-content-wrapper p-0">
-        <div class="map-widget map-report position-relative map-report">
-            <div class="corona-map-tracker" id="tracker-map"></div>
+    <script>
+        var map = L.map('map').setView([-2.5489, 118.0149], 5);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        // Set map boundaries for Indonesia
+        var indonesiaBounds = [
+            [-11.0, 95.0], // Southwest coordinates
+            [6.0, 141.0]   // Northeast coordinates
+        ];
 
-            <div class="map-content-wrap tracker-block tracker-block--4">
-                <div class="tracker-block__body">
-                    <div class="select-country">
-                        <label for="select3" class="sr-only">Country</label>
-                        <select class="country" name="country"></select>
-                    </div>
-                    <div class="track-item">
-                        <p class="track-item__title">Total Cases</p>
-                        <h4 class="track-item__no infected">00,000</h4>
-                    </div>
-                    <div class="track-item">
-                        <p class="track-item__title">Last 24 Hours</p>
-                        <h4 class="track-item__no today_infected">00,000</h4>
-                    </div>
-                    <div class="track-item">
-                        <p class="track-item__title">Deaths <span>(<span class="deaths-rate"></span>%)</span>
-                        </p>
-                        <h4 class="track-item__no deaths">00,000</h4>
-                    </div>
-                    <div class="track-item">
-                        <p class="track-item__title">New Deaths</p>
-                        <h4 class="track-item__no today_deaths">00,000</h4>
-                    </div>
-                    <div class="track-item">
-                        <p class="track-item__title">Recovered <span>(<span class="recover-rate"></span>%)</span>
-                        </p>
-                        <h4 class="track-item__no recovered">00,000</h4>
-                    </div>
+        // Restrict map panning to Indonesia
+        map.setMaxBounds(indonesiaBounds);
+        map.setMinZoom(5);
+
+        // Remove the kodamData array and all related code that adds markers and labels
+        // Data lokasi KODAM
+        var kodamData = [
+            { nama: "KODAM JAYA", lat: -6.1754, lon: 106.8272 },
+            { nama: "KODAM I/BB", lat: 3.5952, lon: 98.6722 },
+            { nama: "KODAM II/SWJ", lat: -2.9761, lon: 104.7754 },
+            { nama: "KODAM III/SLW", lat: -6.9147, lon: 107.6098 },
+            { nama: "KODAM IV/DIP", lat: -7.0051, lon: 110.4381 },
+            { nama: "KODAM V/BRW", lat: -7.2756, lon: 112.7931 },
+            { nama: "KODAM VI/MLW", lat: -0.5022, lon: 117.1536 },
+            { nama: "KODAM IX/UDY", lat: -2.5489, lon: 140.7186 },
+            { nama: "KODAM XII/TPR", lat: 0.0236, lon: 109.3425 },
+            { nama: "KODAM XIII/MDK", lat: 1.4748, lon: 124.8421 },
+            { nama: "KODAM XIV/HSN", lat: -5.1477, lon: 119.4327 },
+            { nama: "KODAM XVI/PTM", lat: -3.6962, lon: 128.1810 },
+            { nama: "KODAM XVII/CEN", lat: -2.5373, lon: 140.7183 },
+            { nama: "KODAM XVIII/KSR", lat: -0.8917, lon: 134.0818 }
+        ];
+
+        kodamData.forEach(function(kodam) {
+            var marker = L.marker([kodam.lat, kodam.lon]).addTo(map)
+                .bindPopup(`<b>${kodam.nama}</b><br><button onclick="fetchKodamData('${kodam.nama}')">Lihat Data</button>`);
+        });
+
+        function fetchKodamData(kodamNama) {
+            fetch(`get_kodam_data.php?nama=${encodeURIComponent(kodamNama)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Jaringan bermasalah atau server tidak merespons');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || Object.keys(data).length === 0) {
+                        document.getElementById('info').innerHTML = `<h2>Data tidak ditemukan</h2>`;
+                    } else {
+                        document.getElementById('info').innerHTML = `<h2>${data.nama}</h2><p>Jumlah Alutsista: ${data.alutsista}</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('info').innerHTML = `<h2>Terjadi kesalahan saat mengambil data</h2>`;
+                });
+        }
+        // Data untuk masing-masing KODAM
+        var kodamDetails = {
+            "KODAM JAYA": "KODAM IBU KOTA JAKARTA RAYA",
+            "KODAM III/Siliwangi": "KODAM JAWA BARAT",
+            "KODAM IV/Diponegoro": "KODAM JAWA TENGAH",
+            "KODAM V/Brawijaya": "KODAM JAWA TIMUR",
+            "KODAM VI/Mulawarman": "KODAM KALIMANTAN TIMUR"
+        };
+
+        kodamData.forEach(function(kodam) {
+            var fullName = kodamDetails[kodam.nama] || kodam.nama;
+            var marker = L.marker([kodam.lat, kodam.lon]).addTo(map)
+                .bindPopup(`<b>${kodam.nama}</b><br>${fullName}<br><button onclick="fetchKodamData('${kodam.nama}')">Lihat Data</button>`);
+        });
+        // Add labels for each KODAM marker
+        kodamData.forEach(function(kodam) {
+            L.marker([kodam.lat, kodam.lon], {
+                icon: L.divIcon({
+                    className: 'kodam-label',
+                    html: kodam.nama,
+                    iconSize: [100, 20],
+                    iconAnchor: [50, 30]
+                })
+            }).addTo(map);
+        });
+
+        // Add CSS style for the labels
+        var style = document.createElement('style');
+        style.innerHTML = `
+            .kodam-label {
+                background: transparent;
+                border: none;
+                color: black;
+                font-weight: bold;
+                text-shadow: 1px 1px white;
+            }
+        `;
+        document.head.appendChild(style);
+       function showKodamData(kodamNama) {
+        const kodamAlutsista = {
+            "KODAM JAYA": {
+                "Tank": 15,
+                "Panser": 25,
+                "Artileri": 30,
+                "Helikopter": 5,
+                "Meriam": 20
+            },
+            "KODAM III/Siliwangi": {
+                "Tank": 20,
+                "Panser": 20,
+                "Artileri": 25,
+                "Helikopter": 3,
+                "Meriam": 15
+            },
+            "KODAM IV/Diponegoro": {
+                "Tank": 18,
+                "Panser": 22,
+                "Artileri": 28,
+                "Helikopter": 4,
+                "Meriam": 18
+            },
+            "KODAM V/Brawijaya": {
+                "Tank": 22,
+                "Panser": 28,
+                "Artileri": 32,
+                "Helikopter": 6,
+                "Meriam": 25
+            },
+            "KODAM VI/Mulawarman": {
+                "Tank": 16,
+                "Panser": 24,
+                "Artileri": 26,
+                "Helikopter": 4,
+                "Meriam": 16
+            }
+    };
+    const koarmadaData = [
+        { nama: "KOARMADA I", lat: -6.1754, lon: 106.8272, 
+        detail: "Markas Komando Armada I (Jakarta)" },
+        { nama: "KOARMADA II", lat: -7.2575, lon: 112.7521,
+        detail: "Markas Komando Armada II (Surabaya)" },
+        { nama: "KOARMADA III", lat: -5.1477, lon: 119.4327,
+        detail: "Markas Komando Armada III (Makassar)" }
+    ];   
+    const koopsauData = [
+        { nama: "KOOPSAU I", lat: -6.3032, lon: 106.8939,
+        detail: "Komando Operasi TNI AU I (Jakarta)" },
+        { nama: "KOOPSAU II", lat: -7.2199, lon: 112.7168,
+        detail: "Komando Operasi TNI AU II (Makassar)" },
+        { nama: "KOOPSAU III", lat: -2.5373, lon: 140.7183,
+        detail: "Komando Operasi TNI AU III (Biak)" }
+    ]; 
+
+    let currentMarkers = [];
+
+    function clearMarkers() {
+        currentMarkers.forEach(marker => map.removeLayer(marker));
+        currentMarkers = [];
+    }
+
+function showForceData(force) {
+    clearMarkers();
+    
+    let data;
+    let zoomLevel = 5;
+    
+    switch(force) {
+        case 'AD':
+            data = kodamData;
+            showKodamMarkers(data);
+            break;
+        case 'AL':
+            data = koarmadaData;
+            showNavyMarkers(data);
+            break;
+        case 'AU':
+            data = koopsauData;
+            showAirForceMarkers(data);
+            break;
+    }
+    
+    // Update active button
+    document.querySelectorAll('.btn-military').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.dataset.force === force) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+function showKodamMarkers(data) {
+    data.forEach(item => {
+        const marker = L.marker([item.lat, item.lon])
+            .bindPopup(`
+                <div class="popup-content">
+                    <h4>${item.nama}</h4>
+                    <button onclick="showKodamData('${item.nama}')" class="popup-btn">
+                        Lihat Data Alutsista
+                    </button>
                 </div>
+            `);
+        marker.addTo(map);
+        currentMarkers.push(marker);
+    });
+}
+
+function showNavyMarkers(data) {
+    data.forEach(item => {
+        const marker = L.marker([item.lat, item.lon])
+            .bindPopup(`
+                <div class="popup-content">
+                    <h4>${item.nama}</h4>
+                    <p>${item.detail}</p>
+                </div>
+            `);
+        marker.addTo(map);
+        currentMarkers.push(marker);
+    });
+}
+
+function showAirForceMarkers(data) {
+    data.forEach(item => {
+        const marker = L.marker([item.lat, item.lon])
+            .bindPopup(`
+                <div class="popup-content">
+                    <h4>${item.nama}</h4>
+                    <p>${item.detail}</p>
+                </div>
+            `);
+        marker.addTo(map);
+        currentMarkers.push(marker);
+    });
+}
+
+
+
+    const data = kodamAlutsista[kodamNama];
+    if (data) {
+        let content = `
+            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: #1a2a3a; margin-bottom: 15px;">${kodamNama}</h3>
+                <table style="width:100%; border-collapse: collapse; margin-bottom: 10px;">
+                    <tr style="background: #1a2a3a; color: white;">
+                        <th style="padding: 8px; text-align: left;">Alutsista</th>
+                        <th style="padding: 8px; text-align: center;">Jumlah</th>
+                    </tr>`;
+        
+        for (let [type, count] of Object.entries(data)) {
+            content += `
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 8px;">${type}</td>
+                    <td style="padding: 8px; text-align: center;">${count}</td>
+                </tr>`;
+        }
+        
+        content += `</table></div>`;
+        document.getElementById('info').innerHTML = content;
+    }
+}
+
+
+    </script>
+<footer class="military-footer">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <button class="btn-military active" data-force="AD">TNI AD</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn-military" data-force="AL">TNI AL</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn-military" data-force="AU">TNI AU</button>
             </div>
         </div>
-    </main>
-    <!--== End Main Content Wrapper ==-->
-
-
-    <!--=======================Javascript============================-->
-    <!-- build:js assets/js/app.min.js -->
-    <!--=== Modernizr Min Js ===-->
-    <script src="assets/js/modernizr.min.js"></script>
-    <!--=== jQuery Min Js ===-->
-    <script src="assets/js/jquery.min.js"></script>
-    <!--=== jQuery Migration Min Js ===-->
-    <script src="assets/js/jquery-migrate.min.js"></script>
-    <!--=== Popper Min Js ===-->
-    <script src="assets/js/popper.min.js"></script>
-    <!--=== Bootstrap Min Js ===-->
-    <script src="assets/js/bootstrap.min.js"></script>
-    <!--=== Select2 Min Js ===-->
-    <script src="assets/js/select2.full.min.js"></script>
-    <!--=== Data Table Min Js ===-->
-    <script src="assets/js/datatables.min.js"></script>
-    <!--=== ChartJS Min Js ===-->
-    <script src="assets/js/chart.min.js"></script>
-    <!--=== jQuery Vector Map Min Js ===-->
-    <script src="assets/js/jquery.vmap.min.js"></script>
-    <!--=== jQuery Vector World Min Js ===-->
-    <script src="assets/js/jquery.vmap.world.js"></script>
-
-    <!--=== APP Js ===-->
-    <script src="assets/js/app.js"></script>
-    <!--=== Active Js ===-->
-    <script src="assets/js/active.js"></script>
-
-    <!-- endbuild -->
+    </div>
+</footer>
 </body>
 
 </html>
